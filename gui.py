@@ -16,13 +16,13 @@ class gui(Ui_MainWindow, QMainWindow):
         # 创建 Ui_MainWindow 实例并设置到主窗口
         self.int_pattern = r"^(?:[1-9]|[1-9][0-9]|1[01][0-9]|12[0-7])$"  # 匹配1到128的整数
         self.int_validator = QRegExpValidator(QRegExp(self.int_pattern))
-        self.timer=QTimer()
+        self.timer = QTimer()
         self.timer.timeout.connect(self.check_thread_status)
         self.timer.start(2000)
         self.flag = True
         self.setupUi(self)
         self.setWindowFlag(Qt.FramelessWindowHint)
-        self.threads=[]
+        self.threads = []
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setValidate()
         self.bottom_set()
@@ -39,12 +39,14 @@ class gui(Ui_MainWindow, QMainWindow):
         regex_validator = QRegExpValidator(regex)
         self.lineEdit_2.setValidator(regex_validator)
         self.lineEdit_3.setValidator(regex_validator)
+
     def check_thread_status(self):
-        if len(self.threads)!=0:
+        if len(self.threads) != 0:
             all_finished = all(thread.isFinished() for thread in self.threads)
             if all_finished:
                 print("All threads have finished.")
                 self.timer.stop()
+
     def setValidate(self):
 
         self.lineEdit_4.setValidator(self.int_validator)
@@ -197,20 +199,23 @@ class gui(Ui_MainWindow, QMainWindow):
         if btnName == "pushButton_12":
             self.bruteForceAttack()
             self.plainTextEdit_9.setPlainText("")
-    def ShowFinishMsg(self,id):
+
+    def ShowFinishMsg(self, id):
         self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
-    def ShowResultMsg(self,list):
+
+    def ShowResultMsg(self, list):
         self.plainTextEdit_9.appendPlainText(f"Theard:{list[0]}找到结果{list[1]}")
+
     def bruteForceAttack(self):
-        self.threads=[]
+        self.threads = []
         P_word = self.plainTextEdit_8.toPlainText()
         C_word = self.plainTextEdit_7.toPlainText()
-        Thread_num=self.lineEdit_4.text()
-        if len(P_word)==len(C_word)==8 and Thread_num!="":
-            Thread_num=int(Thread_num)
-            task_list=self.divide_task(Thread_num)
+        Thread_num = self.lineEdit_4.text()
+        if len(P_word) == len(C_word) == 8 and Thread_num != "":
+            Thread_num = int(Thread_num)
+            task_list = self.divide_task(Thread_num)
             for i in range(Thread_num):
-                thread=Multi_bruteForce(i,task_list[i][0],task_list[i][1],P_word,C_word)
+                thread = Multi_bruteForce(i, task_list[i][0], task_list[i][1], P_word, C_word)
                 thread.finished_signal.connect(self.ShowFinishMsg)
                 thread.result_signal.connect(self.ShowResultMsg)
                 thread.start()
@@ -218,9 +223,7 @@ class gui(Ui_MainWindow, QMainWindow):
                 self.threads.append(thread)
 
         else:
-            QMessageBox.warning(self,"警告","请输入正确的明密和线程数量")
-
-
+            QMessageBox.warning(self, "警告", "请输入正确的明密和线程数量")
 
     def BitEncrption(self):
         self.plainTextEdit_12.textChanged.disconnect()
@@ -341,7 +344,7 @@ class gui(Ui_MainWindow, QMainWindow):
             character = character + chr(AsciiCode)
         self.plainTextEdit.setPlainText(character)
 
-    def divide_task(self,num_segments):
+    def divide_task(self, num_segments):
         start = 0
         end = 1023
         if num_segments <= 0:
