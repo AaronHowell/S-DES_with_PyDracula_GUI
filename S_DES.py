@@ -71,6 +71,9 @@ class S_DES():
         RightPartV2 = [AfterP10[-5:][(i + 2) % 5] for i in range(5)]
         self.K2 = self.PBox(InputBits=LeftPartV2 + RightPartV2, PermutationTable=self.P8, OutPutLength=8)
 
+
+
+
     def BinaryList2Decimal(self, InputBits: list):
         BinaryString = ''.join(str(bit) for bit in InputBits)
         Decimal = int(BinaryString, 2)

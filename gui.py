@@ -157,7 +157,7 @@ class gui(Ui_MainWindow, QMainWindow):
                 QMessageBox.warning(self, '确认', '密钥已写入。')
                 self.buttonSet(True)
             else:
-                QMessageBox.warning(self, '警告', '请输入合法的8位二进制密钥。')
+                QMessageBox.warning(self, '警告', '请输入合法的10位二进制密钥。')
                 text = self.Cipher.GetKey()
                 self.lineEdit_3.setText(text)
                 self.lineEdit_2.setText(text)
@@ -171,7 +171,7 @@ class gui(Ui_MainWindow, QMainWindow):
                 QMessageBox.warning(self, '确认', '密钥已写入。')
                 self.buttonSet(True)
             else:
-                QMessageBox.warning(self, '警告', '请输入合法的8位二进制密钥。')
+                QMessageBox.warning(self, '警告', '请输入合法的10位二进制密钥。')
                 text = self.Cipher.GetKey()
                 self.lineEdit_3.setText(text)
                 self.lineEdit_2.setText(text)
@@ -185,7 +185,7 @@ class gui(Ui_MainWindow, QMainWindow):
                 QMessageBox.warning(self, '确认', '密钥已写入。')
                 self.buttonSet(True)
             else:
-                QMessageBox.warning(self, '警告', '请输入合法的8位二进制密钥。')
+                QMessageBox.warning(self, '警告', '请输入合法的10位二进制密钥。')
                 text = self.Cipher.GetKey()
                 self.lineEdit_3.setText(text)
                 self.lineEdit_2.setText(text)
