@@ -8,12 +8,16 @@ from Multithreading import Multi_bruteForce
 from S_DES import *
 from main_r import *
 
+import time
+
 
 class gui(Ui_MainWindow, QMainWindow):
     def __init__(self):
         super().__init__()
 
         # 创建 Ui_MainWindow 实例并设置到主窗口
+        self.timer=None
+        self.counter=0
         self.int_pattern = r"^(?:[1-9]|[1-9][0-9]|1[01][0-9]|12[0-7])$"  # 匹配1到128的整数
         self.int_validator = QRegExpValidator(QRegExp(self.int_pattern))
         self.timer = QTimer()
@@ -201,19 +205,30 @@ class gui(Ui_MainWindow, QMainWindow):
             self.plainTextEdit_9.setPlainText("")
 
     def ShowFinishMsg(self, id):
-        self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
+        self.counter+=1
+        self.progressBar.setValue(int(self.counter/int(self.lineEdit_4.text())*100))
+
+        if self.counter==int(self.lineEdit_4.text()):
+            self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
+            self.plainTextEdit_9.appendPlainText(f"破解完成，用时{time.perf_counter()-self.timer}")
+        else:
+            self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
 
     def ShowResultMsg(self, list):
         self.plainTextEdit_9.appendPlainText(f"Theard:{list[0]}找到结果{list[1]}")
 
     def bruteForceAttack(self):
         self.threads = []
+        self.plainTextEdit_9.setPlainText("")
+        self.progressBar.setValue(0)
         P_word = self.plainTextEdit_8.toPlainText()
         C_word = self.plainTextEdit_7.toPlainText()
         Thread_num = self.lineEdit_4.text()
         if len(P_word) == len(C_word) == 8 and Thread_num != "":
             Thread_num = int(Thread_num)
             task_list = self.divide_task(Thread_num)
+            self.timer=time.perf_counter()
+
             for i in range(Thread_num):
                 thread = Multi_bruteForce(i, task_list[i][0], task_list[i][1], P_word, C_word)
                 thread.finished_signal.connect(self.ShowFinishMsg)
@@ -224,6 +239,10 @@ class gui(Ui_MainWindow, QMainWindow):
 
         else:
             QMessageBox.warning(self, "警告", "请输入正确的明密和线程数量")
+
+
+
+
 
     def BitEncrption(self):
         self.plainTextEdit_12.textChanged.disconnect()

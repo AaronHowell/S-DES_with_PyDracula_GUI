@@ -25,7 +25,6 @@
     <font>
      <family>Segoe UI</family>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
@@ -678,7 +677,6 @@ Button */
               <font>
                <family>Segoe UI Semibold</family>
                <pointsize>12</pointsize>
-               <weight>7</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -709,7 +707,6 @@ Button */
               <font>
                <family>Segoe UI</family>
                <pointsize>8</pointsize>
-               <weight>50</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -795,7 +792,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -859,7 +855,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -896,7 +891,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -933,7 +927,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -970,7 +963,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1133,7 +1125,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1336,7 +1327,7 @@ Button */
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>3</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="bit_page">
                       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1346,7 +1337,6 @@ Button */
                           <font>
                            <family>楷体</family>
                            <pointsize>25</pointsize>
-                           <weight>50</weight>
                            <italic>false</italic>
                            <bold>false</bold>
                           </font>
@@ -1378,7 +1368,6 @@ Button */
                           <font>
                            <family>楷体</family>
                            <pointsize>25</pointsize>
-                           <weight>50</weight>
                            <italic>false</italic>
                            <bold>false</bold>
                           </font>
@@ -1416,7 +1405,6 @@ Button */
                           <font>
                            <family>Segoe UI</family>
                            <pointsize>10</pointsize>
-                           <weight>50</weight>
                            <italic>false</italic>
                            <bold>false</bold>
                           </font>
@@ -1442,7 +1430,6 @@ Button */
                           <font>
                            <family>楷体</family>
                            <pointsize>25</pointsize>
-                           <weight>50</weight>
                            <italic>false</italic>
                            <bold>false</bold>
                           </font>
@@ -1483,7 +1470,6 @@ Button */
                             <font>
                              <family>楷体</family>
                              <pointsize>25</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -1548,7 +1534,6 @@ Button */
                               <font>
                                <family>楷体</family>
                                <pointsize>25</pointsize>
-                               <weight>50</weight>
                                <italic>false</italic>
                                <bold>false</bold>
                               </font>
@@ -1580,7 +1565,6 @@ Button */
                               <font>
                                <family>Segoe UI</family>
                                <pointsize>10</pointsize>
-                               <weight>50</weight>
                                <italic>false</italic>
                                <bold>false</bold>
                               </font>
@@ -1603,12 +1587,28 @@ Button */
                           </layout>
                          </item>
                          <item>
+                          <widget class="QLabel" name="label_2">
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>破解进度：</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QProgressBar" name="progressBar">
+                           <property name="value">
+                            <number>0</number>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
                           <widget class="QLabel" name="label_10">
                            <property name="font">
                             <font>
                              <family>楷体</family>
                              <pointsize>25</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -1729,7 +1729,6 @@ Button */
                                   <font>
                                    <family>Segoe UI</family>
                                    <pointsize>10</pointsize>
-                                   <weight>50</weight>
                                    <italic>false</italic>
                                    <bold>false</bold>
                                   </font>
@@ -1799,7 +1798,6 @@ Button */
                                   <font>
                                    <family>Segoe UI</family>
                                    <pointsize>10</pointsize>
-                                   <weight>50</weight>
                                    <italic>false</italic>
                                    <bold>false</bold>
                                   </font>
@@ -1825,7 +1823,6 @@ Button */
                                   <font>
                                    <family>楷体</family>
                                    <pointsize>25</pointsize>
-                                   <weight>50</weight>
                                    <italic>false</italic>
                                    <bold>false</bold>
                                   </font>
@@ -1939,7 +1936,6 @@ Button */
                              <font>
                               <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -1971,7 +1967,6 @@ Button */
                              <font>
                               <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -2003,7 +1998,6 @@ Button */
                              <font>
                               <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -2089,7 +2083,6 @@ Button */
                              <font>
                               <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -2120,7 +2113,6 @@ Button */
                             <font>
                              <family>楷体</family>
                              <pointsize>25</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -2300,7 +2292,6 @@ Button */
                             <font>
                              <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -2337,7 +2328,6 @@ Button */
                             <font>
                              <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -2374,7 +2364,6 @@ Button */
                             <font>
                              <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>

@@ -1,3 +1,6 @@
+import random
+import time
+
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from S_DES import S_DES
@@ -18,7 +21,7 @@ class Multi_bruteForce(QThread):
 
     def run(self):
         first_time = True
-
+        #time.sleep(random.randint(0, 50) / 10.0)  #如果你想看到进度条一点点往上涨的话，你可以用这个模拟一下，破解太快了
         while first_time or self.begin != self.end:
             first_time = False
             self.Cipher.SetKey(self.begin)
