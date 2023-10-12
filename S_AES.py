@@ -8,10 +8,12 @@ class S_AES():
           [0xD, 1, 8, 5],
           [6, 2, 0, 3],
           [0xC, 0xE, 0xF, 7]]
+
     INS = [[0xA, 5, 9, 0xB],
            [1, 7, 8, 0xF],
            [6, 0, 2, 3],
            [0xC, 4, 0xD, 0xE]]
+
     RC = [[1, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 1, 1, 0, 0, 0, 0]]
     MC = [[1, 4],
@@ -77,12 +79,15 @@ class S_AES():
         S11 = self.BinaryList2Decimal(S11)
         Dec_MC_Trans = self.matrix_multiply(Matrix, [[S00, S01],
                                                      [S10, S11]])
-        MC_Trans = [[self.Decimal2BinaryList(Dec_MC_Trans[row][col]) for row in range(len(Dec_MC_Trans))] for col in
-                    range(len(Dec_MC_Trans[0]))]
+        MC_Trans=[]
+        for i in range(len(Dec_MC_Trans)):
+            for j in range(len(Dec_MC_Trans)):
+                MC_Trans.append(self.Decimal2BinaryList(Dec_MC_Trans[j][i]))
+
 
 
         MC_Trans = [element for row in MC_Trans for element in row]
-        MC_Trans = [element for row in MC_Trans for element in row]
+
         return MC_Trans
 
     def matrix_multiply(self, A, B):
@@ -147,10 +152,16 @@ if __name__ == "__main__":
     matrix = [a.Decimal2BinaryList(x) for x in text_key]
     row_vector = [element for row in matrix for element in row]
 
-    key_list = [1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1]
-    plaintext_list = [0,1,1,0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1]
+    key_list =       [1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1]
+    plaintext_list = [0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0]
+    plaintext_list2 = [0,1,1,0,1,0,1,1,1,0,1,0,0,0,1,1]
 
-    a.SetKey(key_list)
 
-    print(a.Encryption(plaintext_list))
-    print(a.Decryption(a.Encryption([1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0])))
+    g=gf.GF(4)
+    print(g.mul(4,7))
+    print(g.add(15,8))
+    a.SetKey(row_vector)
+    print(plaintext_list2)
+    #print(a.Encryption(plaintext_list))
+    print(a.Decryption(a.Encryption(plaintext_list2)))
+    print(a.Decryption(a.Encryption([1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0])))

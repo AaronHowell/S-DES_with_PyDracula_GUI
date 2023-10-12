@@ -8,7 +8,7 @@ class GF:
 
     def __init__(self, w):
         self.w = w
-        self.total = (1 << self.w) - 1
+        self.total = (1 << self.w)-1
         self.gflog = []
         self.gfilog = [1]  # g(0) = 1
         self.make_gf_dict(self.w, self.gflog, self.gfilog)
@@ -29,10 +29,10 @@ class GF:
             gflog[gfilog[i]] = i
 
     def add(self, a, b):
-        return (a ^ b) % self.total
+        return (a ^ b)
 
     def sub(self, a, b):
-        return (a ^ b) % self.total
+        return (a ^ b)
 
     def mul(self, a, b):
         if a == 0 or b == 0:
