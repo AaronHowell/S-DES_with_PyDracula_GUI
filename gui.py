@@ -5,7 +5,7 @@ from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui import QRegExpValidator
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import *
-
+from MultithreadingOfAES import *
 from Multithreading import Multi_bruteForce
 from S_DES import *
 from main_r import *
@@ -20,15 +20,17 @@ class gui(Ui_MainWindow, QMainWindow):
     def __init__(self):
         super().__init__()
         self.Encryption_flag=0
+        self.flag_CBC_2 = False
+        self.flag_CBC_1 = False
         # 创建 Ui_MainWindow 实例并设置到主窗口
         self.algorithm_flag=False #False为DES模式，True为AES模式
         self.timer=None
         self.counter=0
         self.int_pattern = r"^(?:[1-9]|[1-9][0-9]|1[01][0-9]|12[0-7])$"  # 匹配1到128的整数
         self.int_validator = QRegExpValidator(QRegExp(self.int_pattern))
-        #self.timer = QTimer()
-        #self.timer.timeout.connect(self.check_thread_status)
-        #self.timer.start(2000)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.check_thread_status)
+        self.timer.start(2000)
         self.flag = True
         self.setupUi(self)
         self.setWindowFlag(Qt.FramelessWindowHint)
@@ -70,78 +72,116 @@ class gui(Ui_MainWindow, QMainWindow):
         self.DES_button.toggled.connect(self.onRadioButtonToggled)
         self.comboBox.currentTextChanged.connect(self.SetEncryptionWays)
         self.onRadioButtonToggled()
+        self.plainTextEdit_15.textChanged.connect(self.CBC_Encrption)
+        self.plainTextEdit_16.textChanged.connect(self.CBC_Decrption)
 
+    def Show16Process(self,num):
+        """num为完成个数"""
+        self.counter+=1
+        self.progressBar.setValue(int(self.counter/65535*100))
+        print(int(self.counter/65535*100))
     def MulEncryption(self):
-        self.plainTextEdit_14.textChanged.disconnect()
-        character = ""
-        Text = self.plainTextEdit_13.toPlainText()
-        AsciiText = [ord(char) for char in Text]
-        bit_array_text = [bin(char)[2:].zfill(8) for char in AsciiText]
-        # Ensure the length is even by adding a space if needed
-        if len(bit_array_text) % 2 != 0:
-            bit_array_text.append('0' * 8)  # Add a space (8 zeros) to make it even
-        # Initialize an empty list to store the 16-bit binary strings
-        bit_array_16bit = []
-        for i in range(0, len(bit_array_text), 2):
-            # Combine two 8-bit binary strings into one 16-bit string
-            binary_word = bit_array_text[i] + bit_array_text[i + 1]
-            bit_array_16bit.append(binary_word)
-        if self.Encryption_flag==0:
-            for Binary_word in bit_array_16bit:
-                EncryptedList = self.Cipher_AES.Encryption([int(x) for x in Binary_word])
-                EncryptedList = self.Cipher_AES_mul_2.Encryption(EncryptedList)
-                AsciiCode1 = int(''.join(map(str, EncryptedList[:8])), 2)
-                AsciiCode2 = int(''.join(map(str, EncryptedList[8:])), 2)
-                character = character + chr(AsciiCode1) + chr(AsciiCode2)
-        elif self.Encryption_flag==1:
-            for Binary_word in bit_array_16bit:
-                EncryptedList = self.Cipher_AES_mul_1.Encryption([int(x) for x in Binary_word])
-                EncryptedList = self.Cipher_AES_mul_2.Encryption(EncryptedList)
-                EncryptedList = self.Cipher_AES_mul_3.Encryption(EncryptedList)
-                AsciiCode1 = int(''.join(map(str, EncryptedList[:8])), 2)
-                AsciiCode2 = int(''.join(map(str, EncryptedList[8:])), 2)
-                character = character + chr(AsciiCode1) + chr(AsciiCode2)
-        self.plainTextEdit_14.setPlainText(character)
-        self.plainTextEdit_14.textChanged.connect(self.MulDecryption)
+        if self.Encryption_flag==0 or self.Encryption_flag==1:
+            self.plainTextEdit_14.textChanged.disconnect()
+            character = ""
+            Text = self.plainTextEdit_13.toPlainText()
+            AsciiText = [ord(char) for char in Text]
+            bit_array_text = [bin(char)[2:].zfill(8) for char in AsciiText]
+            # Ensure the length is even by adding a space if needed
+            if len(bit_array_text) % 2 != 0:
+                bit_array_text.append('0' * 8)  # Add a space (8 zeros) to make it even
+            # Initialize an empty list to store the 16-bit binary strings
+            bit_array_16bit = []
+            for i in range(0, len(bit_array_text), 2):
+                # Combine two 8-bit binary strings into one 16-bit string
+                binary_word = bit_array_text[i] + bit_array_text[i + 1]
+                bit_array_16bit.append(binary_word)
+            if self.Encryption_flag==0:
+                for Binary_word in bit_array_16bit:
+                    EncryptedList = self.Cipher_AES.Encryption([int(x) for x in Binary_word])
+                    EncryptedList = self.Cipher_AES_mul_2.Encryption(EncryptedList)
+                    AsciiCode1 = int(''.join(map(str, EncryptedList[:8])), 2)
+                    AsciiCode2 = int(''.join(map(str, EncryptedList[8:])), 2)
+                    character = character + chr(AsciiCode1) + chr(AsciiCode2)
+            elif self.Encryption_flag==1:
+                for Binary_word in bit_array_16bit:
+                    EncryptedList = self.Cipher_AES_mul_1.Encryption([int(x) for x in Binary_word])
+                    EncryptedList = self.Cipher_AES_mul_2.Encryption(EncryptedList)
+                    EncryptedList = self.Cipher_AES_mul_3.Encryption(EncryptedList)
+                    AsciiCode1 = int(''.join(map(str, EncryptedList[:8])), 2)
+                    AsciiCode2 = int(''.join(map(str, EncryptedList[8:])), 2)
+                    character = character + chr(AsciiCode1) + chr(AsciiCode2)
+            self.plainTextEdit_14.setPlainText(character)
+            self.plainTextEdit_14.textChanged.connect(self.MulDecryption)
+        elif self.Encryption_flag==2:
+            self.plainTextEdit_14.textChanged.disconnect()  # 串加密，密文
+
+            Text = self.plainTextEdit_13.toPlainText()  # 串加密，明文
+            if len(Text) % 16 == 0:
+                binary_string = ""
+                BinaryList = [int(x) for x in Text]
+                for i in range(0, len(BinaryList), 16):
+                    EncryptedList = self.Cipher_AES_mul_1.Encryption(BinaryList[i:i + 16])
+                    EncryptedList = self.Cipher_AES_mul_2.Encryption(EncryptedList)
+                    binary_string = binary_string + ''.join(map(str, EncryptedList))
+                self.plainTextEdit_14.setPlainText(binary_string)
+            self.plainTextEdit_14.textChanged.connect(self.MulDecryption)
 
     def MulDecryption(self):
-        self.plainTextEdit_13.textChanged.disconnect()
-        character = ""
-        Text = self.plainTextEdit_14.toPlainText()
-        AsciiText = [ord(char) for char in Text]
-        bit_array_text = [bin(char)[2:].zfill(8) for char in AsciiText]
+        if self.Encryption_flag == 0 or self.Encryption_flag == 1:
+            self.plainTextEdit_13.textChanged.disconnect()
+            character = ""
+            Text = self.plainTextEdit_14.toPlainText()
+            AsciiText = [ord(char) for char in Text]
+            bit_array_text = [bin(char)[2:].zfill(8) for char in AsciiText]
+            if len(bit_array_text) % 2 != 0:
+                bit_array_text.append('0' * 8)
+            bit_array_16bit = []
+            for i in range(0, len(bit_array_text), 2):
+                binary_word = bit_array_text[i] + bit_array_text[i + 1]
+                bit_array_16bit.append(binary_word)
+            if self.Encryption_flag == 0:
+                for Binary_word in bit_array_16bit:
+                    DecryptedList = self.Cipher_AES_mul_2.Decryption([int(x) for x in Binary_word])
+                    DecryptedList = self.Cipher_AES_mul_1.Decryption(DecryptedList)
+                    AsciiCode1 = int(''.join(map(str, DecryptedList[:8])), 2)
+                    AsciiCode2 = int(''.join(map(str, DecryptedList[8:])), 2)
+                    character = character + chr(AsciiCode1) + chr(AsciiCode2)
+            elif self.Encryption_flag == 1:
+                for Binary_word in bit_array_16bit:
+                    DecryptedList = self.Cipher_AES_mul_3.Decryption([int(x) for x in Binary_word])
+                    DecryptedList = self.Cipher_AES_mul_2.Decryption(DecryptedList)
+                    DecryptedList = self.Cipher_AES_mul_1.Decryption(DecryptedList)
+                    AsciiCode1 = int(''.join(map(str, DecryptedList[:8])), 2)
+                    AsciiCode2 = int(''.join(map(str, DecryptedList[8:])), 2)
+                    character = character + chr(AsciiCode1) + chr(AsciiCode2)
 
-        if len(bit_array_text) % 2 != 0:
-            bit_array_text.append('0' * 8)
+            self.plainTextEdit_13.setPlainText(character)
+            self.plainTextEdit_13.textChanged.connect(self.MulEncryption)
+        elif self.Encryption_flag==2:
+            self.plainTextEdit_13.textChanged.disconnect()  # 串加密，密文
 
-        bit_array_16bit = []
-        for i in range(0, len(bit_array_text), 2):
-            binary_word = bit_array_text[i] + bit_array_text[i + 1]
-            bit_array_16bit.append(binary_word)
-        if self.Encryption_flag == 0:
-            for Binary_word in bit_array_16bit:
-                DecryptedList = self.Cipher_AES_mul_2.Decryption([int(x) for x in Binary_word])
-                DecryptedList = self.Cipher_AES_mul_1.Decryption(DecryptedList)
-                AsciiCode1 = int(''.join(map(str, DecryptedList[:8])), 2)
-                AsciiCode2 = int(''.join(map(str, DecryptedList[8:])), 2)
-                character = character + chr(AsciiCode1) + chr(AsciiCode2)
+            Text = self.plainTextEdit_14.toPlainText()  # 串加密，明文
+            if len(Text) % 16 == 0:
+                binary_string = ""
+                BinaryList = [int(x) for x in Text]
+                for i in range(0, len(BinaryList), 16):
+                    DecryptedList = self.Cipher_AES_mul_2.Decryption(BinaryList[i:i + 16])
+                    DecryptedList = self.Cipher_AES_mul_1.Decryption(DecryptedList)
+                    binary_string = binary_string + ''.join(map(str, DecryptedList))
+                self.plainTextEdit_13.setPlainText(binary_string)
+            self.plainTextEdit_13.textChanged.connect(self.MulDecryption)
 
-        elif self.Encryption_flag == 1:
-            for Binary_word in bit_array_16bit:
-                DecryptedList = self.Cipher_AES_mul_3.Decryption([int(x) for x in Binary_word])
-                DecryptedList = self.Cipher_AES_mul_2.Decryption(DecryptedList)
-                DecryptedList = self.Cipher_AES_mul_1.Decryption(DecryptedList)
-                AsciiCode1 = int(''.join(map(str, DecryptedList[:8])), 2)
-                AsciiCode2 = int(''.join(map(str, DecryptedList[8:])), 2)
-                character = character + chr(AsciiCode1) + chr(AsciiCode2)
-
-        self.plainTextEdit_13.setPlainText(character)
-        self.plainTextEdit_13.textChanged.connect(self.MulEncryption)
     def CheckInputOfAES(self):
-        if self.Encryption_flag==0:
+        if self.Encryption_flag==0 or self.Encryption_flag==2:
             text = self.lineEdit_5.text()
             if self.is_hex_string_hex_8(text):
                 Key_List=self.hex_string_to_binary_list(text)
+                if len(Key_List) < 32:
+                    # 计算需要添加的零的数量
+                    num_zeros_to_add = 32 - len(Key_List)
+                    # 在列表前面添加零
+                    Key_List = [0] * num_zeros_to_add + Key_List
                 self.Cipher_AES_mul_1.SetKey(Key_List[:16])
                 self.Cipher_AES_mul_2.SetKey(Key_List[16:])
                 self.MulTextEditSetable()
@@ -149,13 +189,23 @@ class gui(Ui_MainWindow, QMainWindow):
             else:
                 QMessageBox.warning(self, '警告', '请输入合法的8位十六进制密钥。')
                 text=self.Cipher_AES_mul_1.GetKey()+self.Cipher_AES_mul_2.GetKey()
-                self.lineEdit_5.setText(self.binary_string_to_hex(text))
+                hex_string=self.binary_string_to_hex(text)
+                if len(hex_string)<8:
+                    num_zeros_to_add = 8 - len(hex_string)
+                    # 在字符串前面添加零
+                    hex_string = "0" * num_zeros_to_add + hex_string
+                self.lineEdit_5.setText(hex_string)
 
 
         elif self.Encryption_flag==1:
             text = self.lineEdit_5.text()
             if self.is_hex_string_hex_12(text):
                 Key_List = self.hex_string_to_binary_list(text)
+                if len(Key_List) < 48:
+                    # 计算需要添加的零的数量
+                    num_zeros_to_add = 48 - len(Key_List)
+                    # 在列表前面添加零
+                    Key_List = [0] * num_zeros_to_add + Key_List
                 self.Cipher_AES_mul_1.SetKey(Key_List[:16])
                 self.Cipher_AES_mul_2.SetKey(Key_List[16:32])
                 self.Cipher_AES_mul_3.SetKey(Key_List[32:])
@@ -164,9 +214,14 @@ class gui(Ui_MainWindow, QMainWindow):
             else:
                 QMessageBox.warning(self, '警告', '请输入合法的12位十六进制密钥。')
                 text=self.Cipher_AES_mul_1.GetKey()+self.Cipher_AES_mul_2.GetKey()+self.Cipher_AES_mul_3.GetKey()
-                self.lineEdit_5.setText(self.binary_string_to_hex(text))
-        elif self.Encryption_flag==2:
-            pass
+
+                hex_string=self.binary_string_to_hex(text)
+                if len(hex_string)<8:
+                    num_zeros_to_add = 8 - len(hex_string)
+                    # 在字符串前面添加零
+                    hex_string = "0" * num_zeros_to_add + hex_string
+                self.lineEdit_5.setText(hex_string)
+
     def refresh(self):
         self.setValidate()
     def onRadioButtonToggled(self):
@@ -317,6 +372,9 @@ class gui(Ui_MainWindow, QMainWindow):
         self.closeAppBtn.clicked.connect(lambda: self.close())
         # 侧边栏
         self.btn_multiple.clicked.connect(self.buttonClick)
+        self.pushButton_15.clicked.connect(self.buttonClick)
+        self.pushButton_16.clicked.connect(self.buttonClick)
+        self.pushButton_6.clicked.connect(self.buttonClick)
         self.btn_new.clicked.connect(self.buttonClick)
         self.btn_save.clicked.connect(self.buttonClick)
         self.pushButton.clicked.connect(self.buttonClick)
@@ -330,13 +388,19 @@ class gui(Ui_MainWindow, QMainWindow):
         self.btn_try.clicked.connect(self.buttonClick)
         self.pushButton_13.clicked.connect(self.buttonClick)
         self.pushButton_12.clicked.connect(self.buttonClick)
+        self.pushButton_17.clicked.connect(self.buttonClick)
         self.toggleButton.clicked.connect(lambda: self.toggleMenu(True))
+        self.CBC_Text_Set()
 
     def buttonClick(self):
         # GET BUTTON CLICKED
         btn = self.sender()
         btnName = btn.objectName()
         # SHOW HOME PAGE
+        if btnName == "pushButton_17":
+            self.stackedWidget.setCurrentWidget(self.mul)
+        if btnName =="pushButton_6":
+            self.stackedWidget.setCurrentWidget(self.CBC)
         if btnName == "btn_try":
             self.stackedWidget.setCurrentWidget(self.home)
         if btnName == "btn_bit":
@@ -389,7 +453,7 @@ class gui(Ui_MainWindow, QMainWindow):
                     self.buttonSet(True)
                 else:
                     QMessageBox.warning(self, '警告', '请输入合法的16位二进制密钥。')
-                    text = self.Cipher.GetKey()
+                    text = self.Cipher_AES.GetKey()
                     self.lineEdit_3.setText(text)
                     self.lineEdit_2.setText(text)
                     self.plainTextEdit_11.setPlainText(text)
@@ -398,7 +462,7 @@ class gui(Ui_MainWindow, QMainWindow):
                 if self.is_binary_string(text):
                     self.lineEdit_3.setText(text)
                     self.lineEdit_2.setText(text)
-                    self.Cipher_AES.SetKey([int(x) for x in text])
+                    self.Cipher.SetKey([int(x) for x in text])
                     QMessageBox.warning(self, '确认', '密钥已写入。')
                     self.buttonSet(True)
                 else:
@@ -418,7 +482,7 @@ class gui(Ui_MainWindow, QMainWindow):
                     self.buttonSet(True)
                 else:
                     QMessageBox.warning(self, '警告', '请输入合法的16位二进制密钥。')
-                    text = self.Cipher.GetKey()
+                    text = self.Cipher_AES.GetKey()
                     self.lineEdit_3.setText(text)
                     self.lineEdit_2.setText(text)
                     self.plainTextEdit_11.setPlainText(text)
@@ -447,7 +511,46 @@ class gui(Ui_MainWindow, QMainWindow):
         if btnName == "pushButton_12":
             self.bruteForceAttack()
             self.plainTextEdit_9.setPlainText("")
+        if btnName =="pushButton_15":
+            text = self.lineEdit_7.text()
+            if self.is_binary_string_16(text):
+                self.Cipher_AES.SetKey([int(x) for x in text])
+                QMessageBox.warning(self, '确认', '密钥已写入。')
+                self.CBC_Text_Set()
+                self.buttonSet(True)
+            else:
+                QMessageBox.warning(self, '警告', '请输入合法的16位二进制密钥。')
+                text = self.Cipher_AES.GetKey()
+                self.lineEdit_7.setText(text)
+        if btnName == "pushButton_16":
+            text = self.lineEdit_6.text()
+            if self.is_binary_string_16(text):
+                self.Cipher_AES.SetIV([int(x) for x in text])
+                QMessageBox.warning(self, '确认', '初始向量已写入。')
+                self.CBC_Text_Set()
+                self.buttonSet(True)
+            else:
+                QMessageBox.warning(self, '警告', '请输入合法的16位初始向量。')
+                text = self.Cipher_AES.GetIV()
+                self.lineEdit_6.setText(text)
+    def CBC_Text_Set(self):
+        if self.flag_CBC_1 and self.flag_CBC_2:
+            self.plainTextEdit_15.setReadOnly(False)
+            self.plainTextEdit_16.setReadOnly(False)
+            self.plainTextEdit_15.setStyleSheet('background - color: rgb(33, 37, 43);')
+            self.plainTextEdit_16.setStyleSheet('background - color: rgb(33, 37, 43);')
+        else:
+            self.plainTextEdit_15.setStyleSheet('background-color: rgba(50, 50, 50, 0.8); color: #999999;')
+            self.plainTextEdit_16.setStyleSheet('background-color: rgba(50, 50, 50, 0.8); color: #999999;')
+            self.plainTextEdit_15.setReadOnly(True)
+            self.plainTextEdit_16.setReadOnly(True)
 
+    def ShowFinishMsg_16(self,id):
+        if self.counter==int(self.lineEdit_4.text()):
+            self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
+            self.plainTextEdit_9.appendPlainText(f"破解完成，用时{time.perf_counter()-self.timer}")
+        else:
+            self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
     def ShowFinishMsg(self, id):
         self.counter+=1
         self.progressBar.setValue(int(self.counter/int(self.lineEdit_4.text())*100))
@@ -459,28 +562,61 @@ class gui(Ui_MainWindow, QMainWindow):
             self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
     def ShowResultMsg(self, list):
         self.plainTextEdit_9.appendPlainText(f"Theard:{list[0]}找到结果{list[1]}")
+
+    def ShowResultMsg_16(self, list):
+        hex_string = self.binary_string_to_hex(list[1])
+        if len(hex_string) < 8:
+            num_zeros_to_add = 8 - len(hex_string)
+            # 在字符串前面添加零
+            hex_string = "0" * num_zeros_to_add + hex_string
+        self.lineEdit_5.setText(hex_string)
+        self.plainTextEdit_9.appendPlainText(f"Theard:{list[0]}找到结果{hex_string}")
     def bruteForceAttack(self):
-        self.threads = []
-        self.plainTextEdit_9.setPlainText("")
-        self.progressBar.setValue(0)
-        P_word = self.plainTextEdit_8.toPlainText()
-        C_word = self.plainTextEdit_7.toPlainText()
-        Thread_num = self.lineEdit_4.text()
-        if len(P_word) == len(C_word) == 8 and Thread_num != "":
-            Thread_num = int(Thread_num)
-            task_list = self.divide_task(Thread_num)
-            self.timer=time.perf_counter()
-
-            for i in range(Thread_num):
-                thread = Multi_bruteForce(i, task_list[i][0], task_list[i][1], P_word, C_word)
-                thread.finished_signal.connect(self.ShowFinishMsg)
-                thread.result_signal.connect(self.ShowResultMsg)
-                thread.start()
-                self.plainTextEdit_9.appendPlainText(f"Theard:{i}已启动")
-                self.threads.append(thread)
-
+        if self.algorithm_flag:
+            self.counter=0
+            self.threads = []
+            self.plainTextEdit_9.setPlainText("")
+            self.progressBar.setValue(0)
+            P_word = self.plainTextEdit_8.toPlainText()
+            C_word = self.plainTextEdit_7.toPlainText()
+            Thread_num = self.lineEdit_4.text()
+            if len(P_word) == len(C_word) == 16 and Thread_num != "":
+                Thread_num = int(Thread_num)
+                task_list = self.divide_task_16bit(Thread_num)
+                self.timer = time.perf_counter()
+                for i in range(Thread_num):
+                    thread = Multi_bruteForce_16(i, task_list[i][0], task_list[i][1], P_word, C_word)
+                    thread.finished_signal.connect(self.ShowFinishMsg_16)
+                    thread.result_signal.connect(self.ShowResultMsg_16)
+                    thread.process_signal.connect(self.Show16Process)
+                    thread.start()
+                    self.plainTextEdit_9.appendPlainText(f"Theard:{i}已启动")
+                    self.threads.append(thread)
+            else:
+                QMessageBox.warning(self, "警告", "请输入正确的明密文和线程数量")
         else:
-            QMessageBox.warning(self, "警告", "请输入正确的明密和线程数量")
+            self.counter = 0
+            self.threads = []
+            self.plainTextEdit_9.setPlainText("")
+            self.progressBar.setValue(0)
+            P_word = self.plainTextEdit_8.toPlainText()
+            C_word = self.plainTextEdit_7.toPlainText()
+            Thread_num = self.lineEdit_4.text()
+            if len(P_word) == len(C_word) == 8 and Thread_num != "":
+                Thread_num = int(Thread_num)
+                task_list = self.divide_task(Thread_num)
+
+                self.timer=time.perf_counter()
+
+                for i in range(Thread_num):
+                    thread = Multi_bruteForce(i, task_list[i][0], task_list[i][1], P_word, C_word)
+                    thread.finished_signal.connect(self.ShowFinishMsg)
+                    thread.result_signal.connect(self.ShowResultMsg)
+                    thread.start()
+                    self.plainTextEdit_9.appendPlainText(f"Theard:{i}已启动")
+                    self.threads.append(thread)
+            else:
+                QMessageBox.warning(self, "警告", "请输入正确的明密文和线程数量")
     def BitEncrption(self):
         if self.algorithm_flag:
             self.plainTextEdit_12.textChanged.disconnect()# 串加密，密文
@@ -719,12 +855,9 @@ class gui(Ui_MainWindow, QMainWindow):
         end = 1023
         if num_segments <= 0:
             return []
-
         segment_size = (end - start) // num_segments
-
         segments = []
         current_start = start
-
         for _ in range(num_segments):
             current_end = current_start + segment_size
             # 确保最后一个段不超出范围的终点
@@ -735,7 +868,26 @@ class gui(Ui_MainWindow, QMainWindow):
             end_binary = format(current_end, '010b')
             segments.append((start_binary, end_binary))
             current_start = current_end + 1
+        return segments
 
+    def divide_task_16bit(self,num_segments):
+        start = 0
+        end = 65535
+        if num_segments <= 0:
+            return []
+        segment_size = (end - start) // num_segments
+        segments = []
+        current_start = start
+        for _ in range(num_segments):
+            current_end = current_start + segment_size
+            # 确保最后一个段不超出范围的终点
+            if _ == num_segments - 1:
+                current_end = end
+            # 将起点和终点转换为8位二进制字符串
+            start_binary = format(current_start, '016b')
+            end_binary = format(current_end, '016b')
+            segments.append((start_binary, end_binary))
+            current_start = current_end + 1
         return segments
     def Save_File(self):
         text = self.plainTextEdit.toPlainText()
@@ -756,23 +908,36 @@ class gui(Ui_MainWindow, QMainWindow):
                 print(f'保存文件时发生错误：{e}')
 
     def binary_string_to_hex(self,binary_string):
-        # 使用int将二进制字符串转换为整数
-        binary_int = int(binary_string, 2)
-        # 使用hex将整数转换为十六进制字符串，并去掉前缀'0x'
-        hex_string = hex(binary_int)[2:]
-        return hex_string.upper()  # 转换为大写字母的十六进制字符串
+        try:
+            # 使用int将二进制字符串转换为整数
+            binary_int = int(binary_string, 2)
+            # 使用hex将整数转换为十六进制字符串，并去掉前缀'0x'
+            hex_string = hex(binary_int)[2:]
+            return hex_string.upper()  # 转换为大写字母的十六进制字符串
+        except:
+            return ""
 
     def SetEncryptionWays(self,text):
         if text=='双重加密':
             self.Encryption_flag=0
+            self.CleanPlainText()
             self.MulTextEditSetUnable()
         elif text=="三重加密":
             self.Encryption_flag=1
             self.MulTextEditSetUnable()
-        elif text=="密码分组链(CBC)":
+            self.CleanPlainText()
+        elif text=="双重加密(bit)":
             self.Encryption_flag=2
             self.MulTextEditSetUnable()
+            self.CleanPlainText()
 
+    def CleanPlainText(self):
+        self.plainTextEdit_13.textChanged.disconnect()
+        self.plainTextEdit_14.textChanged.disconnect()
+        self.plainTextEdit_14.setPlainText("")
+        self.plainTextEdit_13.setPlainText("")
+        self.plainTextEdit_13.textChanged.connect(self.MulEncryption)
+        self.plainTextEdit_14.textChanged.connect(self.MulDecryption)
     def is_hex_string_hex_8(self, s):
         if not all(char in '0123456789ABCDEFabcdef' for char in s):
             return False
@@ -797,6 +962,55 @@ class gui(Ui_MainWindow, QMainWindow):
         # 将二进制字符串分割成一个二进制列表
         binary_list = [int(bit) for bit in binary_string]
         return binary_list
+
+    def CBC_Encrption(self):
+        self.plainTextEdit_16.textChanged.disconnect()
+        character = ""
+        Text = self.plainTextEdit_15.toPlainText()
+        AsciiText = [ord(char) for char in Text]
+        bit_array_text = [bin(char)[2:].zfill(8) for char in AsciiText]
+        # Ensure the length is even by adding a space if needed
+        if len(bit_array_text) % 2 != 0:
+            bit_array_text.append('0' * 8)  # Add a space (8 zeros) to make it even
+        # Initialize an empty list to store the 16-bit binary strings
+        bit_array_16bit = []
+        for i in range(0, len(bit_array_text), 2):
+            # Combine two 8-bit binary strings into one 16-bit string
+            binary_word = bit_array_text[i] + bit_array_text[i + 1]
+            bit_array_16bit.append(binary_word)
+
+        EncryptedList = self.Cipher_AES.Encryption_CBC([int(element) for sublist in bit_array_16bit for element in sublist])
+        ascii_chars = []
+        for i in range(0, len(EncryptedList), 8):
+            byte = EncryptedList[i:i + 8]
+            ascii_char = chr(int(''.join(map(str, byte)), 2))
+            ascii_chars.append(ascii_char)
+        result = ''.join(ascii_chars)
+        self.plainTextEdit_16.setPlainText(result)
+        self.plainTextEdit_16.textChanged.connect(self.CBC_Decrption)
+    def CBC_Decrption(self):
+        self.plainTextEdit_15.textChanged.disconnect()
+        character = ""
+        Text = self.plainTextEdit_16.toPlainText()
+        AsciiText = [ord(char) for char in Text]
+        bit_array_text = [bin(char)[2:].zfill(8) for char in AsciiText]
+
+        if len(bit_array_text) % 2 != 0:
+            bit_array_text.append('0' * 8)
+
+        bit_array_16bit = []
+        for i in range(0, len(bit_array_text), 2):
+            binary_word = bit_array_text[i] + bit_array_text[i + 1]
+            bit_array_16bit.append(binary_word)
+        DecryptedList = self.Cipher_AES.Decryption_CBC([int(element) for sublist in bit_array_16bit for element in sublist])
+        ascii_chars = []
+        for i in range(0, len(DecryptedList), 8):
+            byte = DecryptedList[i:i + 8]
+            ascii_char = chr(int(''.join(map(str, byte)), 2))
+            ascii_chars.append(ascii_char)
+        result = ''.join(ascii_chars)
+        self.plainTextEdit_15.setPlainText(result)
+        self.plainTextEdit_15.textChanged.connect(self.CBC_Encrption)
 
 
 

@@ -20,6 +20,13 @@ class S_AES():
           [4, 1]]
     IMC = [[9, 2],
            [2, 9]]
+    IV = []
+
+    def SetIV(self, InputList: list):
+        self.IV = InputList
+
+    def GetIV(self):
+        return ''.join(map(str, self.IV))
 
     def __init__(self):
         self.gf = gf.GF(4)
@@ -79,12 +86,10 @@ class S_AES():
         S11 = self.BinaryList2Decimal(S11)
         Dec_MC_Trans = self.matrix_multiply(Matrix, [[S00, S01],
                                                      [S10, S11]])
-        MC_Trans=[]
+        MC_Trans = []
         for i in range(len(Dec_MC_Trans)):
             for j in range(len(Dec_MC_Trans)):
                 MC_Trans.append(self.Decimal2BinaryList(Dec_MC_Trans[j][i]))
-
-
 
         MC_Trans = [element for row in MC_Trans for element in row]
 
@@ -142,26 +147,91 @@ class S_AES():
         Row = self.BinaryList2Decimal(RowBinary)
         Column = self.BinaryList2Decimal(ColumnBinary)
         return self.Decimal2BinaryList(SubstitutionBox[Row][Column])
+
     def GetKey(self):
         return ''.join(map(str, self.K))
+    def Encryption_CBC(self,InputList:list):
+        """输入一个完整字符串的Bit进行加密"""
+        if len(InputList)==0:
+            return []
+        result=[]
+        P = InputList[:16]
+        print(P)
+
+        Last_Vector = self.Encryption(self.XOR(self.IV, P))
+        result.append([x for x in Last_Vector])
+
+        for i in range(16,len(InputList),16):
+            P=InputList[i:i+16]
+            Last_Vector = self.Encryption(self.XOR(Last_Vector, P))
+            result.append([x for x in Last_Vector])
+
+        flattened_result = [element for sublist in result for element in sublist]
+        return flattened_result
+
+    def Decryption_CBC(self,InputList:list):
+        """输入一个完整加密字符串的Bit进行解密"""
+        if len(InputList)==0:
+            return []
+        result = []
+        C = InputList[:16]
+        Last_Vector=self.Decryption(C)
+        P=self.XOR(self.IV, Last_Vector)
+
+        result.append([x for x in P])
+
+        for i in range(16, len(InputList), 16):
+            C = InputList[i:i+16]
+            Last_Vector = self.Decryption(C)
+            P = self.XOR(InputList[i-16:i], Last_Vector)
+            result.append([x for x in P])
+
+        flattened_result = [element for sublist in result for element in sublist]
+        return flattened_result
 
 if __name__ == "__main__":
-    a = S_AES()
-    text_key = [2, 0xd, 5, 5]
-    text_key_b = []
-    matrix = [a.Decimal2BinaryList(x) for x in text_key]
+    a_E = S_AES()
+    a_D = S_AES()
+    text_key = [0, 0, 0, 0]
+
+    matrix = [a_E.Decimal2BinaryList(x) for x in text_key]
     row_vector = [element for row in matrix for element in row]
 
-    key_list =       [1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1]
-    plaintext_list = [0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0]
-    plaintext_list2 = [0,1,1,0,1,0,1,1,1,0,1,0,0,0,1,1]
+    a_E.SetKey(row_vector)
 
+    text_key_b = [7, 2, 1, 8]
+    matrix = [a_E.Decimal2BinaryList(x) for x in text_key_b]
+    row_vector = [element for row in matrix for element in row]
+    a_D.SetKey(row_vector)
 
-    g=gf.GF(4)
-    print(g.mul(4,7))
-    print(g.add(15,8))
-    a.SetKey(row_vector)
-    print(plaintext_list2)
-    #print(a.Encryption(plaintext_list))
-    print(a.Decryption(a.Encryption(plaintext_list2)))
-    print(a.Decryption(a.Encryption([1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0])))
+    P_list = [1, 1, 1, 1, 1, 1, 1, 1,
+              1, 1, 1, 1, 1, 1, 1, 1]
+
+    C_list = [1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1]
+
+    binary_list = [1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,
+                   1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1,
+                   0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1,
+                   0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1,
+                   0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1,
+                   1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0,
+                   0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0,
+                   1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0]
+
+    a_D.SetIV(P_list)
+    print(a_D.Decryption_CBC(a_D.Encryption_CBC(binary_list)))
+    # print(a_D.Decryption(C_list))
+    # print(a_E.Encryption(P_list))
+    # key_list =       [1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1]
+    # plaintext_list = [0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0]
+    # plaintext_list2 = [0,1,1,0,1,0,1,1,1,0,1,0,0,0,1,1]
+    #
+    #
+    # g=gf.GF(4)
+    # print(g.mul(4,7))
+    # print(g.add(15,8))
+    # a.SetKey(row_vector)
+    # print(plaintext_list2)
+    # #print(a.Encryption(plaintext_list))
+    # print(a.Decryption(a.Encryption(plaintext_list2)))
+    # print(a.Decryption(a.Encryption([1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0])))
