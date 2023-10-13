@@ -32,7 +32,7 @@ class Multi_bruteForce_16(QThread):
             while first_time or temp!=[1,1,1,1,1,1,1,1
                         ,1,1,1,1,1,1,1,1]:
                 self.Cipher_D.SetKey(temp)
-                if self.Cipher_E.Encryption(self.P_list)==self.Cipher_D.Decryption(self.C_list):
+                if self.Cipher_E.Encryption_Attack(self.P_list)==self.Cipher_D.Decryption_Attack(self.C_list):
                     print(f"发送密钥{self.id, self.Cipher_E.GetKey()+self.Cipher_D.GetKey()}")
                     self.result_signal.emit([self.id, self.Cipher_E.GetKey()+self.Cipher_D.GetKey()])
                     print("完成发送")

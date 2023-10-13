@@ -189,6 +189,21 @@ class S_AES():
         flattened_result = [element for sublist in result for element in sublist]
         return flattened_result
 
+    def Encryption_Attack(self,InputList:list):
+        result=[]
+        for i in range(0,len(InputList),16):
+            P=InputList[i:i+16]
+            En = self.Encryption(P)
+            result.append(En)
+        return result
+    def Decryption_Attack(self,InputList:list):
+        result=[]
+        for i in range(0,len(InputList),16):
+            C=InputList[i:i+16]
+            De = self.Decryption(C)
+            result.append(De)
+        return result
+
 if __name__ == "__main__":
     a_E = S_AES()
     a_D = S_AES()

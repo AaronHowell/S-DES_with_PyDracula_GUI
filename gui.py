@@ -320,8 +320,6 @@ class gui(Ui_MainWindow, QMainWindow):
             text = sender.toPlainText()
             valid_chars = '01'
             new_text = ''.join(char for char in text if char in valid_chars)
-            if len(new_text) > 16:
-                new_text = new_text[:16]
             if new_text != text:
                 sender.setPlainText(new_text)
                 cursor = sender.textCursor()
@@ -578,9 +576,11 @@ class gui(Ui_MainWindow, QMainWindow):
             self.plainTextEdit_9.setPlainText("")
             self.progressBar.setValue(0)
             P_word = self.plainTextEdit_8.toPlainText()
+
+
             C_word = self.plainTextEdit_7.toPlainText()
             Thread_num = self.lineEdit_4.text()
-            if len(P_word) == len(C_word) == 16 and Thread_num != "":
+            if (len(P_word) % 16 ==0)and (len(C_word) % 16 ==0) and (len(P_word)==len(C_word))and Thread_num != "":
                 Thread_num = int(Thread_num)
                 task_list = self.divide_task_16bit(Thread_num)
                 self.timer = time.perf_counter()
@@ -593,7 +593,7 @@ class gui(Ui_MainWindow, QMainWindow):
                     self.plainTextEdit_9.appendPlainText(f"Theard:{i}已启动")
                     self.threads.append(thread)
             else:
-                QMessageBox.warning(self, "警告", "请输入正确的明密文和线程数量")
+                QMessageBox.warning(self, "警告", f"请输入正确的明密文和线程数量。\n明文长度:{len(P_word)}\n密文长度:{len(C_word)}")
         else:
             self.counter = 0
             self.threads = []
