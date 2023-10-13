@@ -4,14 +4,13 @@ import time
 from PyQt5.QtCore import QThread, pyqtSignal
 from S_AES import *
 
+from multiprocessing import *
+
+class Multi_bruteForce_16(Process):
 
 
-class Multi_bruteForce_16(QThread):
-    finished_signal = pyqtSignal(int)
-    result_signal = pyqtSignal(list)
-    process_signal= pyqtSignal(int)
 
-    def __init__(self, id, start_point, end_point, P, C):
+    def __init__(self, id, start_point, end_point, P, C,Queue,finshQueue,Progress):
         super().__init__()
         self.id = id
         self.begin = [int(x) for x in start_point]
@@ -20,6 +19,9 @@ class Multi_bruteForce_16(QThread):
         self.C_list = [int(x) for x in C]
         self.Cipher_E = S_AES()
         self.Cipher_D = S_AES()
+        self.Queue=Queue
+        self.finshQueue = finshQueue
+        self.PgQueue=Progress
 
     def run(self):
         first_time = True
@@ -33,15 +35,18 @@ class Multi_bruteForce_16(QThread):
                         ,1,1,1,1,1,1,1,1]:
                 self.Cipher_D.SetKey(temp)
                 if self.Cipher_E.Encryption_Attack(self.P_list)==self.Cipher_D.Decryption_Attack(self.C_list):
+                    self.Queue.put([self.id, self.Cipher_E.GetKey()+self.Cipher_D.GetKey()])
+
                     print(f"发送密钥{self.id, self.Cipher_E.GetKey()+self.Cipher_D.GetKey()}")
-                    self.result_signal.emit([self.id, self.Cipher_E.GetKey()+self.Cipher_D.GetKey()])
+
                     print("完成发送")
                 temp=self.binary_addition(temp,[1])
+                self.PgQueue.put(1)
+
             self.begin = self.binary_addition(self.begin, [1])
 
-            self.process_signal.emit(1)
-
-        self.finished_signal.emit(self.id)
+        print("进程结束")
+        self.finshQueue.put(self.id)
 
     def BinaryList2Decimal(self, InputBits: list):
         BinaryString = ''.join(str(bit) for bit in InputBits)

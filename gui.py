@@ -11,6 +11,7 @@ from S_DES import *
 from main_r import *
 from S_AES import *
 import time
+from multiprocessing import *
 
 
 
@@ -28,9 +29,9 @@ class gui(Ui_MainWindow, QMainWindow):
         self.counter=0
         self.int_pattern = r"^(?:[1-9]|[1-9][0-9]|1[01][0-9]|12[0-7])$"  # 匹配1到128的整数
         self.int_validator = QRegExpValidator(QRegExp(self.int_pattern))
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.check_thread_status)
-        self.timer.start(2000)
+        self.timer2 = QTimer()
+        self.timer2.timeout.connect(self.check_thread_status)
+        self.timer2.start(1000)
         self.flag = True
         self.setupUi(self)
         self.setWindowFlag(Qt.FramelessWindowHint)
@@ -40,11 +41,8 @@ class gui(Ui_MainWindow, QMainWindow):
         self.bottom_set()
         self.Cipher = S_DES()
         self.Cipher_AES = S_AES()
-
         self.Cipher_AES_mul_1 = S_AES()
-
         self.Cipher_AES_mul_2 = S_AES()
-
         self.Cipher_AES_mul_3 = S_AES()
         self.MulTextEditSetUnable()
         self.buttonSet(False)
@@ -75,11 +73,18 @@ class gui(Ui_MainWindow, QMainWindow):
         self.plainTextEdit_15.textChanged.connect(self.CBC_Encrption)
         self.plainTextEdit_16.textChanged.connect(self.CBC_Decrption)
 
-    def Show16Process(self,num):
+        self.P_Queue=Queue() #多进程通信管道
+        self.F_Queue=Queue()
+        self.Pg_Queue=Queue()
+        self.counter2=0
+    def Show16Process(self):
+
+        while not(self.Pg_Queue.empty()):
+            self.counter2+=1
+            self.Pg_Queue.get()
         """num为完成个数"""
-        self.counter+=1
-        self.progressBar.setValue(int(self.counter/65535*100))
-        print(int(self.counter/65535*100))
+        self.progressBar.setValue(int(self.counter/(65535*65535)*100))
+
     def MulEncryption(self):
         if self.Encryption_flag==0 or self.Encryption_flag==1:
             self.plainTextEdit_14.textChanged.disconnect()
@@ -266,11 +271,16 @@ class gui(Ui_MainWindow, QMainWindow):
             self.refresh()
 
     def check_thread_status(self):
-        if len(self.threads) != 0:
-            all_finished = all(thread.isFinished() for thread in self.threads)
-            if all_finished:
-                print("All threads have finished.")
-                self.timer.stop()
+        if self.algorithm_flag:
+            self.ShowResultMsg_16()
+            self.ShowFinishMsg_16()
+            self.Show16Process()
+        else:
+            if len(self.threads) != 0:
+                all_finished = all(thread.isFinished() for thread in self.threads)
+                if all_finished:
+                    print("All threads\Processes have finished.")
+
     def setValidate(self):
         if self.algorithm_flag:
             self.lineEdit_4.setValidator(self.int_validator)
@@ -543,12 +553,15 @@ class gui(Ui_MainWindow, QMainWindow):
             self.plainTextEdit_15.setReadOnly(True)
             self.plainTextEdit_16.setReadOnly(True)
 
-    def ShowFinishMsg_16(self,id):
-        if self.counter==int(self.lineEdit_4.text()):
-            self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
-            self.plainTextEdit_9.appendPlainText(f"破解完成，用时{time.perf_counter()-self.timer}")
+    def ShowFinishMsg_16(self):
+        if self.F_Queue.empty():
+            return
         else:
-            self.plainTextEdit_9.appendPlainText(f"Theard:{id}已退出")
+            self.plainTextEdit_9.appendPlainText(f"Theard:{self.F_Queue.get()}已退出")
+            self.counter+=1
+            if self.counter==int(self.lineEdit_4.text()):
+                self.plainTextEdit_9.appendPlainText(f"破解完成，用时{time.perf_counter()-self.timer}")
+
     def ShowFinishMsg(self, id):
         self.counter+=1
         self.progressBar.setValue(int(self.counter/int(self.lineEdit_4.text())*100))
@@ -561,7 +574,10 @@ class gui(Ui_MainWindow, QMainWindow):
     def ShowResultMsg(self, list):
         self.plainTextEdit_9.appendPlainText(f"Theard:{list[0]}找到结果{list[1]}")
 
-    def ShowResultMsg_16(self, list):
+    def ShowResultMsg_16(self):
+        if self.P_Queue.empty():
+            return
+        list=self.P_Queue.get()
         hex_string = self.binary_string_to_hex(list[1])
         if len(hex_string) < 8:
             num_zeros_to_add = 8 - len(hex_string)
@@ -572,7 +588,7 @@ class gui(Ui_MainWindow, QMainWindow):
     def bruteForceAttack(self):
         if self.algorithm_flag:
             self.counter=0
-            self.threads = []
+            self.processes = []
             self.plainTextEdit_9.setPlainText("")
             self.progressBar.setValue(0)
             P_word = self.plainTextEdit_8.toPlainText()
@@ -585,13 +601,10 @@ class gui(Ui_MainWindow, QMainWindow):
                 task_list = self.divide_task_16bit(Thread_num)
                 self.timer = time.perf_counter()
                 for i in range(Thread_num):
-                    thread = Multi_bruteForce_16(i, task_list[i][0], task_list[i][1], P_word, C_word)
-                    thread.finished_signal.connect(self.ShowFinishMsg_16)
-                    thread.result_signal.connect(self.ShowResultMsg_16)
-                    thread.process_signal.connect(self.Show16Process)
-                    thread.start()
+                    process = Multi_bruteForce_16(i, task_list[i][0], task_list[i][1], P_word, C_word,self.P_Queue,self.F_Queue,self.Pg_Queue)
+                    process.start()
                     self.plainTextEdit_9.appendPlainText(f"Theard:{i}已启动")
-                    self.threads.append(thread)
+                    self.processes.append(process)
             else:
                 QMessageBox.warning(self, "警告", f"请输入正确的明密文和线程数量。\n明文长度:{len(P_word)}\n密文长度:{len(C_word)}")
         else:
