@@ -1348,7 +1348,6 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
-        self.comboBox.addItem("")
         self.horizontalLayout_14.addWidget(self.comboBox)
         self.pushButton_6 = QtWidgets.QPushButton(self.mul)
         self.pushButton_6.setMinimumSize(QtCore.QSize(50, 30))
@@ -1535,7 +1534,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.styleSheet)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(5)
+        self.stackedWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1567,8 +1566,8 @@ class Ui_MainWindow(object):
         self.pushButton_13.setText(_translate("MainWindow", "Key"))
         self.label_14.setText(_translate("MainWindow", "密文(bit串)"))
         self.label_18.setText(_translate("MainWindow", "注:选择S-DES时为暴力破解，选择S-AES时为中间相遇攻击"))
-        self.label_8.setText(_translate("MainWindow", "明文"))
-        self.label_9.setText(_translate("MainWindow", "密文"))
+        self.label_8.setText(_translate("MainWindow", "明文(bit)"))
+        self.label_9.setText(_translate("MainWindow", "密文(bit)"))
         self.label_11.setText(_translate("MainWindow", "线程数量"))
         self.pushButton_12.setText(_translate("MainWindow", "开始破解"))
         self.label_2.setText(_translate("MainWindow", "破解进度："))
@@ -1590,8 +1589,7 @@ class Ui_MainWindow(object):
         self.label_15.setText(_translate("MainWindow", "加密方式："))
         self.comboBox.setItemText(0, _translate("MainWindow", "双重加密"))
         self.comboBox.setItemText(1, _translate("MainWindow", "三重加密"))
-        self.comboBox.setItemText(2, _translate("MainWindow", "密码分组链(CBC)"))
-        self.comboBox.setItemText(3, _translate("MainWindow", "双重加密(bit)"))
+        self.comboBox.setItemText(2, _translate("MainWindow", "双重加密(bit)"))
         self.pushButton_6.setText(_translate("MainWindow", "CBC"))
         self.label_16.setText(_translate("MainWindow", "密钥(HEX)"))
         self.pushButton_14.setText(_translate("MainWindow", "Key"))

@@ -1352,7 +1352,7 @@ background-image: url(:/icons/images/icons/cil-loop-circular.png)</string>
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>5</number>
+                      <number>2</number>
                      </property>
                      <widget class="QWidget" name="CBC">
                       <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -1749,7 +1749,7 @@ background-image: url(:/icons/images/icons/cil-loop-circular.png)</string>
                             <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
                            </property>
                            <property name="text">
-                            <string>明文</string>
+                            <string>明文(bit)</string>
                            </property>
                           </widget>
                          </item>
@@ -1759,7 +1759,7 @@ background-image: url(:/icons/images/icons/cil-loop-circular.png)</string>
                             <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
                            </property>
                            <property name="text">
-                            <string>密文</string>
+                            <string>密文(bit)</string>
                            </property>
                           </widget>
                          </item>
@@ -2467,11 +2467,6 @@ background-image: url(:/icons/images/icons/cil-loop-circular.png)</string>
                            <item>
                             <property name="text">
                              <string>三重加密</string>
-                            </property>
-                           </item>
-                           <item>
-                            <property name="text">
-                             <string>密码分组链(CBC)</string>
                             </property>
                            </item>
                            <item>

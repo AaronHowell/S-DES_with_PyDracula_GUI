@@ -2,25 +2,7 @@ import gf
 
 
 class S_AES():
-    K = []
-    w = [[], [], [], [], [], []]
-    NS = [[9, 4, 0xA, 0xB],
-          [0xD, 1, 8, 5],
-          [6, 2, 0, 3],
-          [0xC, 0xE, 0xF, 7]]
 
-    INS = [[0xA, 5, 9, 0xB],
-           [1, 7, 8, 0xF],
-           [6, 0, 2, 3],
-           [0xC, 4, 0xD, 0xE]]
-
-    RC = [[1, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 1, 1, 0, 0, 0, 0]]
-    MC = [[1, 4],
-          [4, 1]]
-    IMC = [[9, 2],
-           [2, 9]]
-    IV = []
 
     def SetIV(self, InputList: list):
         self.IV = InputList
@@ -30,6 +12,25 @@ class S_AES():
 
     def __init__(self):
         self.gf = gf.GF(4)
+        self.K = []
+        self.w = [[], [], [], [], [], []]
+        self.NS = [[9, 4, 0xA, 0xB],
+              [0xD, 1, 8, 5],
+              [6, 2, 0, 3],
+              [0xC, 0xE, 0xF, 7]]
+
+        self.INS = [[0xA, 5, 9, 0xB],
+               [1, 7, 8, 0xF],
+               [6, 0, 2, 3],
+               [0xC, 4, 0xD, 0xE]]
+
+        self.RC = [[1, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 1, 1, 0, 0, 0, 0]]
+        self.MC = [[1, 4],
+              [4, 1]]
+        self.IMC = [[9, 2],
+               [2, 9]]
+        self.IV = []
 
     def Encryption(self, InputBits):
         """应该给出16bit的明文。进行加密操作"""
@@ -207,34 +208,47 @@ class S_AES():
 if __name__ == "__main__":
     a_E = S_AES()
     a_D = S_AES()
-    text_key = [0, 0, 0, 0]
 
-    matrix = [a_E.Decimal2BinaryList(x) for x in text_key]
-    row_vector = [element for row in matrix for element in row]
 
-    a_E.SetKey(row_vector)
 
-    text_key_b = [7, 2, 1, 8]
-    matrix = [a_E.Decimal2BinaryList(x) for x in text_key_b]
-    row_vector = [element for row in matrix for element in row]
-    a_D.SetKey(row_vector)
+    value=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
-    P_list = [1, 1, 1, 1, 1, 1, 1, 1,
-              1, 1, 1, 1, 1, 1, 1, 1]
+    value2=[0,1,0,0,1,0,0,0,0,0,0,0,1,1,1,0]
 
-    C_list = [1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1]
+    a_D.SetKey([0,0,1,1,1,1,0,0,1,1,0,0,1,0,1,0])
 
-    binary_list = [1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,
-                   1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1,
-                   0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1,
-                   0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1,
-                   0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1,
-                   1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0,
-                   0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0,
-                   1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0]
+    a_E.SetKey([0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0])
+    print(a_D.Encryption(a_E.Encryption(value)))
 
-    a_D.SetIV(P_list)
-    print(a_D.Decryption_CBC(a_D.Encryption_CBC(binary_list)))
+
+    # text_key = [0, 0, 0, 0]
+    #
+    # matrix = [a_E.Decimal2BinaryList(x) for x in text_key]
+    # row_vector = [element for row in matrix for element in row]
+    #
+    # a_E.SetKey(row_vector)
+    #
+    # text_key_b = [7, 2, 1, 8]
+    # matrix = [a_E.Decimal2BinaryList(x) for x in text_key_b]
+    # row_vector = [element for row in matrix for element in row]
+    # a_D.SetKey(row_vector)
+    #
+    # P_list = [1, 1, 1, 1, 1, 1, 1, 1,
+    #           1, 1, 1, 1, 1, 1, 1, 1]
+    #
+    # C_list = [1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1]
+    #
+    # binary_list = [1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,
+    #                1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1,
+    #                0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1,
+    #                0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1,
+    #                0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1,
+    #                1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0,
+    #                0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0,
+    #                1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0]
+    #
+    # a_D.SetIV(P_list)
+    # print(a_D.Decryption_CBC(a_D.Encryption_CBC(binary_list)))
     # print(a_D.Decryption(C_list))
     # print(a_E.Encryption(P_list))
     # key_list =       [1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1]
