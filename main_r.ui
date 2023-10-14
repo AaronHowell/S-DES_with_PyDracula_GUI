@@ -3,12 +3,15 @@
  <author>Wanderson M. Pimenta</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>940</width>
-    <height>817</height>
+    <width>957</width>
+    <height>809</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -981,6 +984,23 @@ Button */
                   </property>
                  </widget>
                 </item>
+                <item>
+                 <widget class="QPushButton" name="btn_multiple">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>45</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">
+background-image: url(:/icons/images/icons/cil-loop-circular.png)</string>
+                  </property>
+                  <property name="text">
+                   <string>多重加密</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>
@@ -1092,21 +1112,20 @@ Button */
                 <enum>QFrame::Raised</enum>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
+                <item>
+                 <widget class="QRadioButton" name="DES_button">
+                  <property name="text">
+                   <string>S-DES</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="AES_button">
+                  <property name="text">
+                   <string>S-AES</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <widget class="QLabel" name="titleRightInfo">
                   <property name="sizePolicy">
@@ -1114,6 +1133,12 @@ Button */
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>600</width>
+                    <height>0</height>
+                   </size>
                   </property>
                   <property name="maximumSize">
                    <size>
@@ -1327,8 +1352,247 @@ Button */
                       <string notr="true">background: transparent;</string>
                      </property>
                      <property name="currentIndex">
-                      <number>0</number>
+                      <number>5</number>
                      </property>
+                     <widget class="QWidget" name="CBC">
+                      <layout class="QVBoxLayout" name="verticalLayout_19">
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_23">
+                         <item>
+                          <widget class="QPushButton" name="pushButton_17">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>50</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <family>Segoe UI</family>
+                             <pointsize>10</pointsize>
+                             <italic>false</italic>
+                             <bold>false</bold>
+                            </font>
+                           </property>
+                           <property name="cursor">
+                            <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(52, 59, 72);</string>
+                           </property>
+                           <property name="text">
+                            <string>返回</string>
+                           </property>
+                           <property name="icon">
+                            <iconset resource="D:/Python_pro/Modern_GUI_PyDracula_PySide6_or_PyQt6-master/resources.qrc">
+                             <normaloff>:/icons/images/icons/cil-share.png</normaloff>:/icons/images/icons/cil-share.png</iconset>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_20">
+                           <property name="focusPolicy">
+                            <enum>Qt::NoFocus</enum>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>密码分组链(CBC)     </string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_19">
+                         <item>
+                          <widget class="QLabel" name="label_22">
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>密钥(Bit)    </string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="lineEdit_7">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(33, 37, 43);</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="pushButton_15">
+                           <property name="minimumSize">
+                            <size>
+                             <width>150</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <family>Segoe UI</family>
+                             <pointsize>10</pointsize>
+                             <italic>false</italic>
+                             <bold>false</bold>
+                            </font>
+                           </property>
+                           <property name="cursor">
+                            <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(52, 59, 72);</string>
+                           </property>
+                           <property name="text">
+                            <string>Key</string>
+                           </property>
+                           <property name="icon">
+                            <iconset resource="D:/Python_pro/Modern_GUI_PyDracula_PySide6_or_PyQt6-master/resources.qrc">
+                             <normaloff>:/icons/images/icons/cil-dialpad.png</normaloff>:/icons/images/icons/cil-dialpad.png</iconset>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_22">
+                         <item>
+                          <widget class="QLabel" name="label_21">
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>初始向量(Bit)</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="lineEdit_6">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(33, 37, 43);</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="pushButton_16">
+                           <property name="minimumSize">
+                            <size>
+                             <width>150</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <family>Segoe UI</family>
+                             <pointsize>10</pointsize>
+                             <italic>false</italic>
+                             <bold>false</bold>
+                            </font>
+                           </property>
+                           <property name="cursor">
+                            <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(52, 59, 72);</string>
+                           </property>
+                           <property name="text">
+                            <string>IV</string>
+                           </property>
+                           <property name="icon">
+                            <iconset resource="D:/Python_pro/Modern_GUI_PyDracula_PySide6_or_PyQt6-master/resources.qrc">
+                             <normaloff>:/icons/images/icons/cil-dialpad.png</normaloff>:/icons/images/icons/cil-dialpad.png</iconset>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_21">
+                         <item>
+                          <widget class="QLabel" name="label_23">
+                           <property name="font">
+                            <font>
+                             <family>楷体</family>
+                             <pointsize>25</pointsize>
+                             <italic>false</italic>
+                             <bold>false</bold>
+                            </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>明文</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_24">
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>密文</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_20">
+                         <item>
+                          <widget class="QPlainTextEdit" name="plainTextEdit_15">
+                           <property name="minimumSize">
+                            <size>
+                             <width>200</width>
+                             <height>150</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(33, 37, 43);</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPlainTextEdit" name="plainTextEdit_16">
+                           <property name="minimumSize">
+                            <size>
+                             <width>200</width>
+                             <height>150</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(33, 37, 43);</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
                      <widget class="QWidget" name="bit_page">
                       <layout class="QVBoxLayout" name="verticalLayout_11">
                        <item>
@@ -1462,6 +1726,13 @@ Button */
                        <string notr="true"/>
                       </property>
                       <layout class="QVBoxLayout" name="verticalLayout_10">
+                       <item>
+                        <widget class="QLabel" name="label_18">
+                         <property name="text">
+                          <string>注:选择S-DES时为暴力破解，选择S-AES时为中间相遇攻击</string>
+                         </property>
+                        </widget>
+                       </item>
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_7">
                          <item>
@@ -2154,6 +2425,196 @@ Button */
                          </item>
                          <item>
                           <widget class="QPlainTextEdit" name="plainTextEdit_6">
+                           <property name="minimumSize">
+                            <size>
+                             <width>200</width>
+                             <height>150</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(33, 37, 43);</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                     <widget class="QWidget" name="mul">
+                      <layout class="QVBoxLayout" name="verticalLayout_12">
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_14">
+                         <item>
+                          <widget class="QLabel" name="label_15">
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>加密方式：</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QComboBox" name="comboBox">
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(33, 37, 43);</string>
+                           </property>
+                           <item>
+                            <property name="text">
+                             <string>双重加密</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
+                             <string>三重加密</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
+                             <string>密码分组链(CBC)</string>
+                            </property>
+                           </item>
+                           <item>
+                            <property name="text">
+                             <string>双重加密(bit)</string>
+                            </property>
+                           </item>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="pushButton_6">
+                           <property name="minimumSize">
+                            <size>
+                             <width>50</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>50</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(52, 59, 72);</string>
+                           </property>
+                           <property name="text">
+                            <string>CBC</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_18"/>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_15">
+                         <item>
+                          <widget class="QLabel" name="label_16">
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>密钥(HEX)</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="lineEdit_5">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(33, 37, 43);</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="pushButton_14">
+                           <property name="minimumSize">
+                            <size>
+                             <width>150</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <family>Segoe UI</family>
+                             <pointsize>10</pointsize>
+                             <italic>false</italic>
+                             <bold>false</bold>
+                            </font>
+                           </property>
+                           <property name="cursor">
+                            <cursorShape>PointingHandCursor</cursorShape>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(52, 59, 72);</string>
+                           </property>
+                           <property name="text">
+                            <string>Key</string>
+                           </property>
+                           <property name="icon">
+                            <iconset resource="D:/Python_pro/Modern_GUI_PyDracula_PySide6_or_PyQt6-master/resources.qrc">
+                             <normaloff>:/icons/images/icons/cil-dialpad.png</normaloff>:/icons/images/icons/cil-dialpad.png</iconset>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_17">
+                         <item>
+                          <widget class="QLabel" name="label_19">
+                           <property name="font">
+                            <font>
+                             <family>楷体</family>
+                             <pointsize>25</pointsize>
+                             <italic>false</italic>
+                             <bold>false</bold>
+                            </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>明文</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="label_17">
+                           <property name="styleSheet">
+                            <string notr="true">	font: 25pt &quot;楷体&quot;;</string>
+                           </property>
+                           <property name="text">
+                            <string>密文</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_16">
+                         <item>
+                          <widget class="QPlainTextEdit" name="plainTextEdit_13">
+                           <property name="minimumSize">
+                            <size>
+                             <width>200</width>
+                             <height>150</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">background-color: rgb(33, 37, 43);</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPlainTextEdit" name="plainTextEdit_14">
                            <property name="minimumSize">
                             <size>
                              <width>200</width>
