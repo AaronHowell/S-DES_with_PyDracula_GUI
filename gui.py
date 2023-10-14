@@ -14,7 +14,6 @@ import time
 class gui(Ui_MainWindow, QMainWindow):
     def __init__(self):
         super().__init__()
-
         # 创建 Ui_MainWindow 实例并设置到主窗口
         self.timer=None
         self.counter=0
