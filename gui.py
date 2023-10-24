@@ -551,10 +551,13 @@ class gui(Ui_MainWindow, QMainWindow):
             if self.is_binary_string_16(text):
                 self.Cipher_AES.SetKey([int(x) for x in text])
                 QMessageBox.warning(self, '确认', '密钥已写入。')
+                self.flag_CBC_1=True
                 self.CBC_Text_Set()
                 self.buttonSet(True)
             else:
                 QMessageBox.warning(self, '警告', '请输入合法的16位二进制密钥。')
+                self.flag_CBC_1 = False
+                self.CBC_Text_Set()
                 text = self.Cipher_AES.GetKey()
                 self.lineEdit_7.setText(text)
         if btnName == "pushButton_16":
@@ -562,10 +565,13 @@ class gui(Ui_MainWindow, QMainWindow):
             if self.is_binary_string_16(text):
                 self.Cipher_AES.SetIV([int(x) for x in text])
                 QMessageBox.warning(self, '确认', '初始向量已写入。')
+                self.flag_CBC_2 = True
                 self.CBC_Text_Set()
                 self.buttonSet(True)
             else:
                 QMessageBox.warning(self, '警告', '请输入合法的16位初始向量。')
+                self.flag_CBC_2 = False
+                self.CBC_Text_Set()
                 text = self.Cipher_AES.GetIV()
                 self.lineEdit_6.setText(text)
 
