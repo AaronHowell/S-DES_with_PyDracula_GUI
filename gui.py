@@ -544,8 +544,9 @@ class gui(Ui_MainWindow, QMainWindow):
         if btnName == "pushButton_5":
             self.Save_File()
         if btnName == "pushButton_12":
-            self.bruteForceAttack()
             self.plainTextEdit_9.setPlainText("")
+            self.bruteForceAttack()
+
         if btnName == "pushButton_15":
             text = self.lineEdit_7.text()
             if self.is_binary_string_16(text):
@@ -679,15 +680,17 @@ class gui(Ui_MainWindow, QMainWindow):
                 Thread_num = int(Thread_num)
                 task_list = self.divide_task_16bit(Thread_num)
                 self.timer = time.perf_counter()
+                with open('En.pkl','wb') as file1:
+                        pass
+                with open('De.pkl','wb') as file2:
+                        pass
+                print(P_word)
+                print(C_word)
                 for i in range(Thread_num):
-                    with open('En.pkl','wb') as file1:
-                        pass
-                    with open('De.pkl','wb') as file2:
-                        pass
                     process = Multi_bruteForce_16(i, task_list[i][0], task_list[i][1], P_word, C_word, self.P_Queue,
                                                   self.F_Queue, self.Pg_Queue,self.read_lock,self.event,self.T_Queue)
                     process.start()
-                    self.plainTextEdit_9.appendPlainText(f"Theard:{i}已启动")
+                    self.plainTextEdit_9.appendPlainText(f"Process:{i}已启动")
                     self.processes.append(process)
             else:
                 QMessageBox.warning(self, "警告",
