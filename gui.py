@@ -1141,16 +1141,25 @@ class gui(Ui_MainWindow, QMainWindow):
         return super(gui, self).eventFilter(obj, event)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:  # 如果鼠标左键按下
-            self._dragPosition = event.globalPos() - self.frameGeometry().topLeft()  # 计算鼠标在窗口中的位置
+        try:
+            if event.button() == Qt.LeftButton:  # 如果鼠标左键按下
+                self._dragPosition = event.globalPos() - self.frameGeometry().topLeft()  # 计算鼠标在窗口中的位置
+        except Exception as e:
+            print(e)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton and self._dragPosition:  # 如果鼠标左键按下且已记录位置
-            self.move(event.globalPos() - self._dragPosition)  # 移动窗口到新的位置
+        try:
+            if event.buttons() == Qt.LeftButton and self._dragPosition:
+                self.move(event.globalPos() - self._dragPosition)
+        except Exception as e:
+            print(e)
 
     def mouseReleaseEvent(self, event):
-        if event.button() == Qt.LeftButton:  # 如果鼠标左键释放
-            self._dragPosition = None  # 清空记录的位置
+        try:
+            if event.button() == Qt.LeftButton:
+                self._dragPosition = None
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":
