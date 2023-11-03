@@ -587,7 +587,7 @@ Button */
         <widget class="QFrame" name="leftMenuBg">
          <property name="minimumSize">
           <size>
-           <width>60</width>
+           <width>50</width>
            <height>0</height>
           </size>
          </property>
@@ -685,7 +685,7 @@ Button */
               </font>
              </property>
              <property name="text">
-              <string>Simple-DES</string>
+              <string>Simple-DES/AES</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -725,6 +725,12 @@ Button */
           </item>
           <item>
            <widget class="QFrame" name="leftMenuFrame">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
@@ -1155,7 +1161,7 @@ background-image: url(:/icons/images/icons/cil-loop-circular.png)</string>
                    </font>
                   </property>
                   <property name="text">
-                   <string>S-DES ChongQingUniversity</string>
+                   <string>S-DES/AES ChongQingUniversity</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
