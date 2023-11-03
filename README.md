@@ -8,8 +8,10 @@
 
 使用之前，请先对照 requirements.txt 安装相应的环境，并且安装 pyqt5-tools，可以使用以下shell命令:
 
-pip install PyQt5==5.15.9
-pip install PyQt5_sip==12.12.1
+pip install PyQt5==5.15.9  
+
+pip install PyQt5_sip==12.12.1  
+
 pip install pyqt5-tools
 
 
