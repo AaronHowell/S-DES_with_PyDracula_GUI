@@ -1,3 +1,5 @@
+**特别提醒，S-AES和S-DES合并为了一个项目，可在软件内进行选用**
+
 # S-DES/AES_with_PyDracula_GUI
 
 ## 使用前准备
